@@ -169,33 +169,30 @@ elif page == "🔮 Зробити прогноз":
 
         submit_button = st.form_submit_button(label="Прогнозувати")
 
-    if submit_button:
+   if submit_button:
         # Формуємо DataFrame з введених даних
-        input_data = pd.DataFrame(
-            {
-                "CreditScore": [credit_score],
-                "Geography": [geography],
-                "Gender": [gender],
-                "Age": [age],
-                "Tenure": [tenure],
-                "Balance": [balance],
-                "NumOfProducts": [num_products],
-                "HasCrCard": [has_cr_card],
-                "IsActiveMember": [is_active],
-                "EstimatedSalary": [estimated_salary],
-            }
-        )
-
-        # Робимо прогноз
-        prediction = model.predict(input_data)[0]
+        input_data = pd.DataFrame({
+            'CreditScore': [credit_score],
+            'Geography': [geography],
+            'Gender': [gender],
+            'Age': [age],
+            'Tenure': [tenure],
+            'Balance': [balance],
+            'NumOfProducts': [num_products],
+            'HasCrCard': [has_cr_card],
+            'IsActiveMember': [is_active],
+            'EstimatedSalary': [estimated_salary]
+        })
+        
+        # Отримуємо ймовірність відтоку (клас 1)
         prediction_proba = model.predict_proba(input_data)[0][1]
-
+        
         st.markdown("---")
-        if prediction == 1:
-            st.error(
-                f"⚠️ **Високий ризик!** Клієнт ймовірно залишить банк. (Ймовірність: {prediction_proba:.1%})"
-            )
+        
+        # Розподіл на 3 рівні ризику на основі ймовірності
+        if prediction_proba >= 0.60:
+            st.error(f"🔴 **Високий ризик!** Клієнт з великою ймовірністю залишить банк. (Ймовірність відтоку: {prediction_proba:.1%})")
+        elif prediction_proba >= 0.30:
+            st.warning(f"🟡 **Середній ризик.** Рекомендується запропонувати кращі умови або бонус. (Ймовірність відтоку: {prediction_proba:.1%})")
         else:
-            st.success(
-                f"✅ **Низький ризик.** Клієнт ймовірно залишиться. (Ймовірність відтоку: {prediction_proba:.1%})"
-            )
+            st.success(f"🟢 **Низький ризик.** Клієнт ймовірно залишиться. (Ймовірність відтоку: {prediction_proba:.1%})")
