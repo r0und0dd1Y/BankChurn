@@ -168,8 +168,7 @@ elif page == "🔮 Зробити прогноз":
             )
 
         submit_button = st.form_submit_button(label="Прогнозувати")
-
-   if submit_button:
+if submit_button:
         # Формуємо DataFrame з введених даних
         input_data = pd.DataFrame({
             'CreditScore': [credit_score],
@@ -193,6 +192,6 @@ elif page == "🔮 Зробити прогноз":
         if prediction_proba >= 0.60:
             st.error(f"🔴 **Високий ризик!** Клієнт з великою ймовірністю залишить банк. (Ймовірність відтоку: {prediction_proba:.1%})")
         elif prediction_proba >= 0.30:
-            st.warning(f"🟡 **Середній ризик.** Рекомендується запропонувати кращі умови або бонус. (Ймовірність відтоку: {prediction_proba:.1%})")
+            st.warning(f"🟡 **Середній ризик.** Клієнт вагається. Рекомендується запропонувати кращі умови або бонус. (Ймовірність відтоку: {prediction_proba:.1%})")
         else:
-            st.success(f"🟢 **Низький ризик.** Клієнт ймовірно залишиться. (Ймовірність відтоку: {prediction_proba:.1%})")
+            st.success(f"🟢 **Низький ризик.** Клієнт лояльний і ймовірно залишиться. (Ймовірність відтоку: {prediction_proba:.1%})")
